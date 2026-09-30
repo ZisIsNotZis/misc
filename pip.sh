@@ -1,0 +1,1 @@
+pip install --pre -U --upgrade-strategy eager peft optimum bitsandbytes diffusers deepspeed xformers flash-attn torch torchvision scikit-learn numba matplotlib jupyterlab awscli awslogs udocker

@@ -1,0 +1,18 @@
+#!/bin/bash
+cd $1
+set -x
+git checkout .
+git clean -df
+B=main
+git checkout $B||{ 
+	B=master
+	git checkout $B
+}
+sed -i s/*/$B/g .git/config
+git fetch --depth=1
+git reset --hard origin/$B
+git branch -D `git branch|grep -Pv '\\*|main|master'`||true
+git branch -dr `git branch -r|grep -Pv 'HEAD|main|master'`||true
+git fetch --depth=1
+git reflog expire --expire-unreachable=now --all
+git gc --aggressive --prune=all

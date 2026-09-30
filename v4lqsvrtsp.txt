@@ -1,0 +1,32 @@
+ffmpeg \
+  -f v4l2 -input_format mjpeg -video_size 1280x720 -framerate 30 \
+  -thread_queue_size 512 -fflags nobuffer -flags low_delay -probesize 32 -analyzeduration 0 \
+  -i /dev/video0 \
+  -init_hw_device qsv=hw -filter_hw_device hw \
+  -vf "format=nv12,hwupload=extra_hw_frames=64,format=qsv" \
+  -c:v h264_qsv \
+  -preset veryfast -bf 0 -refs 1 -g 30 -look_ahead 0 -low_delay_brc 1 \
+  -rc_mode CBR -b:v 2500k -maxrate 2500k \
+  -f rtsp -muxdelay 0.1 -rtsp_transport tcp \
+  rtsp://localhost:8554/mystream
+
+
+ffmpeg -i /dev/video0 \
+  -init_hw_device qsv=hw -filter_hw_device hw \
+  -vf "format=nv12,hwupload=extra_hw_frames=64,format=qsv" \
+  -c:v h264_qsv \
+  -preset veryfast -bf 0 -refs 1 -g 30 -look_ahead 0 -low_delay_brc 1 \
+  -rc_mode CBR -b:v 2500k -maxrate 2500k \
+  -f rtsp -muxdelay 0.1 -rtsp_transport tcp \
+  rtsp://localhost:8554/mystream
+
+ffmpeg \
+  -f v4l2 -i /dev/video0 \
+  -init_hw_device qsv=hw \
+  -vf "format=nv12,hwupload,format=qsv" \
+  -c:v h264_qsv \
+  -tune zero_latency -bf 0 -g 30 \
+  -f rtsp rtsp://localhost:8554/mystream
+
+my async
+focus close far difference

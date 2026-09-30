@@ -1,0 +1,35 @@
+import torch
+from nn import *
+
+
+class Mm(Module):
+    def __init__(self, weight: tuple[int, ...], bias: tuple[int, ...]):
+        super().__init__()
+        self.weight = Parameter(init.kaiming_uniform_(torch.empty(weight), 5**.5))
+        self.bias = Parameter(torch.zeros(bias))
+
+    def forward(self, x: torch.Tensor, bias: bool, transpose: bool, bmm: bool):
+        if transpose:
+            x = x.transpose(0, 1)
+        if bmm:
+            x = x.bmm(self.weight.mT) if bias else self.bias.baddbmm(x, self.weight.mT)
+        else:
+            x = x@self.weight.mT
+            if bias:
+                x = x+self.bias
+        if transpose:
+            x = x.transpose(0, 1)
+        return x
+
+
+x = torch.rand(64, 128, 256, device='cuda', dtype=torch.float16)
+xt = x.transpose(0, 1).contiguous()
+m = Mm((x.size(1), x.size(2), x.size(2)), (x.size(1), 1, x.size(2))).to('cuda', torch.float16)
+mc = torch.compile(m, fullgraph=True, dynamic=False, mode='max-autotune')
+for bias in range(2):
+    for compile in range(2):
+        for transpose in range(2):
+            for bmm in range(2):
+                print('bias', bias, 'compile', compile, 'transpose', transpose, 'bmm', bmm)
+                (mc if compile else m)(x if transpose else xt, bias, transpose, bmm)
+                get_ipython().run_line_magic('timeit', '(mc if compile else m)(x if transpose else xt, bias, transpose, bmm).sum().cpu()')

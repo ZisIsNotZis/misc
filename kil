@@ -1,0 +1,3 @@
+#!/bin/sh
+for i in stop disable;do systemctl $i mdatp puppet intune-daemon.socket docker docker.socket containerd EasyMonitor wpa_supplicant;done
+killall postgres gjs sogoupinyin-watchdog sogoupinyin-service fcitx ssh sshd java python sh bash

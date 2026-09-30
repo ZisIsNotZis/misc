@@ -1,0 +1,9 @@
+#!/bin/bash
+for((i=0;i<12;i++))
+do	cd /sys/devices/system/cpu/cpu$i
+	[ $((i%6)) -lt ${1:-6} ]&&{
+		echo 1 >online
+		echo ${2:-40}00000 >cpufreq/scaling_max_freq
+		echo ${3:-conservative}>cpufreq/scaling_governor
+	}||echo 0 >online
+done

@@ -25,5 +25,6 @@ venv/
 # editors / os
 .vscode/
 .idea/
+.pi/
 .DS_Store
 *.swp

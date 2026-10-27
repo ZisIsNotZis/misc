@@ -28,21 +28,21 @@ credential stores removed, inline secrets redacted (see below).
   `thres`, `continuousatn`) are short in-place handwritten experiments on
   synthetic `torch.randn` / `numpy` tensors — no dataset or customer data.
 - Sanitisation record: `lm.yml`, `lm.json`, `github-recovery-codes.txt`, `p.txt`
-  deleted; `chengzhi.sh`, `down.py`, `trtllm.sh` redacted. Final credential/IP
-  scan over the tree returns zero matches.
+  deleted; `chengzhi.sh`, `trtllm.sh` redacted; `down.py` removed entirely (see
+  Publication removals). Final credential/IP scan over the tree returns zero
+  matches.
 
 ## Boundaries
 
-No tests, no CI, no dependency manifest, no LICENSE. Scripts are
-context-dependent and several reference absolute paths or local hosts, so most
-will not run unmodified. `fitbox.py` is empty; `feat.py`, `nic.py`, `mymisc.py`
-are trivial stubs. `roi2.py` depends on commercial MVTec **halcon** (license-gated).
-`down.py` retains employer-internal asset/bucket naming from an industrial-vision
-deployment even after its credentials were stripped — treat it as a governance
-liability and drop it before any wider redistribution.
+No tests, no CI, no dependency manifest. Licensed AGPL-3.0-only (`LICENSE`).
+Scripts are context-dependent and several reference absolute paths or local hosts,
+so most will not run unmodified. `feat.py`, `nic.py`, `mymisc.py` are trivial
+stubs. `roi2.py` depends on commercial MVTec **halcon** (license-gated).
 
 ## Publication removals
 
-- `down.py` was removed before publication: it carried employer-internal
-  industrial-vision asset and bucket naming. Credentials in that file were
-  redacted first; the file itself was dropped as employer-internal (AGENTS.md rule 3).
+- `down.py` — carried employer-internal industrial-vision asset and bucket naming.
+  Credentials were redacted first, then the file itself was dropped as
+  employer-internal; it is not part of this tree.
+- `fitbox.py` — an empty file left in place since the earlier migration; removed as
+  junk.
